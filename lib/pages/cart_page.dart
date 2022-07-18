@@ -1,12 +1,16 @@
 import 'package:disticapp/pages/card_cart.dart';
+import 'package:disticapp/provider/cart_provider.dart';
 import 'package:disticapp/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
+
     PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: backgroundColor1,
@@ -80,10 +84,11 @@ class CartPage extends StatelessWidget {
         padding: EdgeInsets.symmetric(
           horizontal: defaultMargin,
         ),
-        children: [
-          CartCard(),
-          CartCard(),
-        ],
+        children: cartProvider.carts
+            .map(
+              (cart) => CartCard(cart),
+            )
+            .toList(),
       );
     }
 
@@ -109,7 +114,7 @@ class CartPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Rp.40.000',
+                    'Rp ${cartProvider.totalHarga().toString()}',
                     style: priceTextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: semiBold,
@@ -171,8 +176,9 @@ class CartPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: backgroundColor4,
       appBar: header(),
-      body: content(),
-      bottomNavigationBar: customButtonNav(),
+      body: cartProvider.carts.length == 0 ? emptyTicket() : content(),
+      bottomNavigationBar:
+          cartProvider.carts.length == 0 ? SizedBox() : customButtonNav(),
     );
   }
 }

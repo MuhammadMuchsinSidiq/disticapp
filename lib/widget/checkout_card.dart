@@ -1,9 +1,11 @@
+import 'package:disticapp/models/cart_model.dart';
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
 
 class CheckoutCard extends StatelessWidget {
-  const CheckoutCard({Key? key}) : super(key: key);
+  final CartModel cart;
+  CheckoutCard(this.cart);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,9 @@ class CheckoutCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
                   image: DecorationImage(
-                    image: AssetImage('assets/buswerkudara2.png'),
+                    image: AssetImage(
+                      cart.tiket!.galeri_tiket![0].url_iamges.toString(),
+                    ),
                   ),
                 ),
               ),
@@ -39,7 +43,7 @@ class CheckoutCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Tiket Bus Werkudara',
+                      cart.tiket!.nama_tiket.toString(),
                       style: primaryTextStyle.copyWith(
                         fontSize: 14,
                         fontWeight: semiBold,
@@ -50,7 +54,7 @@ class CheckoutCard extends StatelessWidget {
                       height: 2,
                     ),
                     Text(
-                      'Rp. 20.000',
+                      'Rp. ${cart.tiket!.harga}',
                       style: priceTextStyle.copyWith(
                         fontSize: 14,
                       ),
@@ -62,7 +66,7 @@ class CheckoutCard extends StatelessWidget {
                 width: 5,
               ),
               Text(
-                '2 Items',
+                '${cart.quantity} Items',
                 style: secondaryTextStyle.copyWith(
                   fontSize: 12,
                 ),

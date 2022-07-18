@@ -1,13 +1,21 @@
+import 'package:disticapp/models/user_model.dart';
+import 'package:disticapp/provider/auth_provider.dart';
+import 'package:disticapp/provider/tiket_provider.dart';
 import 'package:disticapp/theme.dart';
 import 'package:disticapp/widget/destination_tile.dart';
 import 'package:disticapp/widget/product_card.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel user = authProvider.user;
+    TiketProvider tiketProvider = Provider.of<TiketProvider>(context);
+
     Widget header() {
       return Container(
         margin: EdgeInsets.only(
@@ -22,14 +30,14 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Hello, Sidiq',
+                    'Hello, ${user.name}',
                     style: subTitleTextStyle.copyWith(
                       fontWeight: semiBold,
                       fontSize: 24,
                     ),
                   ),
                   Text(
-                    '@sidiqmchn',
+                    '@${user.username}',
                     style: subTitleTextStyle.copyWith(
                       fontSize: 16,
                     ),
@@ -168,8 +176,11 @@ class HomePage extends StatelessWidget {
                 width: defaultMargin,
               ),
               Row(
-                children: [ProductCard(), ProductCard()],
-              ),
+                  children: tiketProvider.tikets
+                      .map(
+                        (tiket) => ProductCard(tiket),
+                      )
+                      .toList()),
             ],
           ),
         ),

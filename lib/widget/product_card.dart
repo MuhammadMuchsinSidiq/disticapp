@@ -1,16 +1,24 @@
 import 'dart:io';
 
+import 'package:disticapp/models/tiket_model.dart';
+import 'package:disticapp/pages/product_page.dart';
 import 'package:disticapp/theme.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({Key? key}) : super(key: key);
+  final TiketModel tiket;
+  ProductCard(this.tiket);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/product');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductPage(tiket),
+          ),
+        );
       },
       child: Container(
         width: 215,
@@ -29,7 +37,7 @@ class ProductCard extends StatelessWidget {
               height: 30,
             ),
             Image.asset(
-              'assets/busmerah.png',
+              tiket.galeri_tiket![0].url_iamges.toString(),
               width: 215,
               height: 150,
               fit: BoxFit.cover,
@@ -43,13 +51,13 @@ class ProductCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Sabtu-Minggu',
+                    tiket.items!.nama_kategori.toString(),
                     style: secondaryTextStyle.copyWith(
                       fontSize: 12,
                     ),
                   ),
                   Text(
-                    'Bus Werkudara',
+                    tiket.nama_tiket.toString(),
                     style: tripleTextStyle.copyWith(
                       fontSize: 18,
                       fontWeight: semiBold,
@@ -60,7 +68,7 @@ class ProductCard extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    'Rp.20.000',
+                    tiket.harga.toString(),
                     style: priceTextStyle.copyWith(
                         fontSize: 14, fontWeight: medium),
                   )

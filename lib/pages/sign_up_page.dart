@@ -1,14 +1,33 @@
+import 'package:disticapp/provider/auth_provider.dart';
 import 'package:disticapp/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SignUpPage extends StatelessWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  TextEditingController nameController = TextEditingController(text: '');
+  TextEditingController usernameController = TextEditingController(text: '');
+  TextEditingController emailController = TextEditingController(text: '');
+  TextEditingController phoneController = TextEditingController(text: '');
+  TextEditingController passwordController = TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
+    handleSignUp() async {
+      if (await authProvider.register(
+          name: nameController.text,
+          username: usernameController.text,
+          email: emailController.text,
+          phone_number: phoneController.text,
+          password: passwordController.text)) {
+        Navigator.pushNamed(context, '/home');
+      }
+    }
+
     Widget header() {
       return Container(
-        margin: EdgeInsets.only(top: 30),
+        margin: EdgeInsets.only(top: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -19,10 +38,10 @@ class SignUpPage extends StatelessWidget {
                 fontWeight: semiBold,
               ),
             ),
-            Text(
-              'Silahkan isi sesuai data diri Anda',
-              style: subTitleTextStyle,
-            ),
+            // Text(
+            //   'Silahkan isi sesuai data diri Anda',
+            //   style: subTitleTextStyle,
+            // ),
           ],
         ),
       );
@@ -31,7 +50,7 @@ class SignUpPage extends StatelessWidget {
     Widget nameInput() {
       return Container(
         margin: EdgeInsets.only(
-          top: 50,
+          top: 10,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,6 +87,7 @@ class SignUpPage extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         style: primaryTextStyle,
+                        controller: nameController,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Masukkan Nama Lengkap',
                           hintStyle: subTitleTextStyle,
@@ -86,7 +106,7 @@ class SignUpPage extends StatelessWidget {
     Widget usernameInput() {
       return Container(
         margin: EdgeInsets.only(
-          top: 20,
+          top: 10,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,6 +143,7 @@ class SignUpPage extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         style: primaryTextStyle,
+                        controller: usernameController,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Masukkan Nama Pengguna',
                           hintStyle: subTitleTextStyle,
@@ -141,7 +162,7 @@ class SignUpPage extends StatelessWidget {
     Widget emailInput() {
       return Container(
         margin: EdgeInsets.only(
-          top: 20,
+          top: 10,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,8 +199,66 @@ class SignUpPage extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         style: primaryTextStyle,
+                        controller: emailController,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Masukkan Alamat Email',
+                          hintStyle: subTitleTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget phoneInput() {
+      return Container(
+        margin: EdgeInsets.only(
+          top: 10,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Telepon',
+              style: tripleTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/icon_email.png',
+                      width: 17,
+                    ),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        keyboardType: TextInputType.phone,
+                        style: primaryTextStyle,
+                        controller: phoneController,
+                        decoration: InputDecoration.collapsed(
+                          hintText: ' 0812xxxxxxx',
                           hintStyle: subTitleTextStyle,
                         ),
                       ),
@@ -196,7 +275,7 @@ class SignUpPage extends StatelessWidget {
     Widget passwordInput() {
       return Container(
         margin: EdgeInsets.only(
-          top: 20,
+          top: 10,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,6 +312,7 @@ class SignUpPage extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         style: primaryTextStyle,
+                        controller: passwordController,
                         obscureText: true,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Masukkan Password',
@@ -253,11 +333,9 @@ class SignUpPage extends StatelessWidget {
       return Container(
         height: 50,
         width: double.infinity,
-        margin: EdgeInsets.only(top: 30),
+        margin: EdgeInsets.only(top: 20),
         child: TextButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/home');
-          },
+          onPressed: handleSignUp,
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
@@ -277,7 +355,9 @@ class SignUpPage extends StatelessWidget {
 
     Widget footer() {
       return Container(
-        margin: EdgeInsets.only(bottom: 30),
+        margin: EdgeInsets.only(
+          bottom: 180,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -316,6 +396,7 @@ class SignUpPage extends StatelessWidget {
               nameInput(),
               usernameInput(),
               emailInput(),
+              phoneInput(),
               passwordInput(),
               signInButton(),
               Spacer(),

@@ -1,10 +1,14 @@
-import 'dart:math';
-
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:disticapp/models/tiket_model.dart';
+import 'package:disticapp/provider/cart_provider.dart';
 import 'package:disticapp/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductPage extends StatefulWidget {
+  final TiketModel tiket;
+  ProductPage(this.tiket);
+
   @override
   State<ProductPage> createState() => _ProductPageState();
 }
@@ -20,6 +24,8 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
+
     Future<void> showSuccessDialog() async {
       return showDialog(
         context: context,
@@ -73,7 +79,9 @@ class _ProductPageState extends State<ProductPage> {
                     width: 155,
                     height: 45,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/cart-page');
+                      },
                       style: TextButton.styleFrom(
                         backgroundColor: primaryColor,
                         shape: RoundedRectangleBorder(
@@ -140,10 +148,10 @@ class _ProductPageState extends State<ProductPage> {
             ),
           ),
           CarouselSlider(
-            items: images
+            items: widget.tiket.galeri_tiket!
                 .map(
                   (image) => Image.asset(
-                    image,
+                    image.url_iamges.toString(),
                     width: MediaQuery.of(context).size.width,
                     height: 310,
                     fit: BoxFit.cover,
@@ -166,7 +174,7 @@ class _ProductPageState extends State<ProductPage> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: images.map(
+            children: widget.tiket.galeri_tiket!.map(
               (e) {
                 index++;
                 return indicator(index);
@@ -206,14 +214,14 @@ class _ProductPageState extends State<ProductPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'TIKET BUS WERKUDARA',
+                          widget.tiket.nama_tiket.toString(),
                           style: primaryTextStyle.copyWith(
                             fontSize: 18,
                             fontWeight: semiBold,
                           ),
                         ),
                         Text(
-                          'Sabtu & Minggu',
+                          widget.tiket.items!.nama_kategori.toString(),
                           style: secondaryTextStyle.copyWith(
                             fontSize: 12,
                           ),
@@ -250,7 +258,7 @@ class _ProductPageState extends State<ProductPage> {
                     style: primaryTextStyle,
                   ),
                   Text(
-                    'Rp.20.000',
+                    widget.tiket.harga.toString(),
                     style: priceTextStyle.copyWith(
                       fontWeight: semiBold,
                     ),
@@ -262,7 +270,7 @@ class _ProductPageState extends State<ProductPage> {
               margin: EdgeInsets.only(
                 left: defaultMargin,
                 right: defaultMargin,
-                bottom: 40,
+                bottom: 100,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -278,7 +286,7 @@ class _ProductPageState extends State<ProductPage> {
                     height: 12,
                   ),
                   Text(
-                    'Unpaved trails and mixed surfaces are easy when you have the traction and support you need. Casual enough for the daily commute',
+                    widget.tiket.deskripsi.toString(),
                     style: secondaryTextStyle.copyWith(
                       fontSize: 14,
                     ),
@@ -288,60 +296,126 @@ class _ProductPageState extends State<ProductPage> {
               ),
             ),
 
-            //BUTTON
-            Container(
-              width: double.infinity,
-              margin: EdgeInsets.only(
-                left: defaultMargin,
-                right: defaultMargin,
-                bottom: 60,
-              ),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/detail-chat');
-                    },
-                    child: Container(
-                      width: 54,
-                      height: 54,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/button_chat.png'),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 16,
-                  ),
-                  Expanded(
-                    child: Container(
-                      height: 54,
-                      child: TextButton(
-                        onPressed: () {
-                          showSuccessDialog();
-                        },
-                        style: TextButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          backgroundColor: primaryColor,
-                        ),
-                        child: Text(
-                          'Add To Chart',
-                          style: primaryTextStyle.copyWith(
-                            fontSize: 16,
-                            fontWeight: semiBold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
+            // //BUTTON
+            // Container(
+            //   width: double.infinity,
+            //   margin: EdgeInsets.only(
+            //     left: defaultMargin,
+            //     right: defaultMargin,
+            //     bottom: 60,
+            //   ),
+            //   child: Row(
+            //     children: [
+            //       GestureDetector(
+            //         onTap: () {
+            //           Navigator.pushNamed(context, '/detail-chat');
+            //         },
+            //         child: Container(
+            //           width: 54,
+            //           height: 54,
+            //           decoration: BoxDecoration(
+            //             image: DecorationImage(
+            //               image: AssetImage('assets/button_chat.png'),
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //       SizedBox(
+            //         width: 16,
+            //       ),
+            //       Expanded(
+            //         child: Container(
+            //           height: 54,
+            //           child: TextButton(
+            //             onPressed: () {
+            //               showSuccessDialog();
+            //             },
+            //             style: TextButton.styleFrom(
+            //               shape: RoundedRectangleBorder(
+            //                 borderRadius: BorderRadius.circular(12),
+            //               ),
+            //               backgroundColor: primaryColor,
+            //             ),
+            //             child: Text(
+            //               'Checkout',
+            //               style: primaryTextStyle.copyWith(
+            //                 fontSize: 16,
+            //                 fontWeight: semiBold,
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       )
+            //     ],
+            //   ),
+            // ),
           ],
+        ),
+      );
+    }
+
+    Widget footer() {
+      return Container(
+        margin: EdgeInsets.only(
+          bottom: 0,
+        ),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: backgroundColor1,
+        ),
+        child: Container(
+          width: double.infinity,
+          margin: EdgeInsets.only(
+            left: defaultMargin,
+            right: defaultMargin,
+            bottom: 60,
+            top: 50,
+          ),
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, '/detail-chat');
+                },
+                child: Container(
+                  width: 54,
+                  height: 54,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/button_chat.png'),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 16,
+              ),
+              Expanded(
+                child: Container(
+                  height: 54,
+                  child: TextButton(
+                    onPressed: () {
+                      cartProvider.addCart(widget.tiket);
+                      showSuccessDialog();
+                    },
+                    style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      backgroundColor: primaryColor,
+                    ),
+                    child: Text(
+                      'Checkout',
+                      style: primaryTextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: semiBold,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       );
     }
@@ -352,8 +426,10 @@ class _ProductPageState extends State<ProductPage> {
         children: [
           header(),
           content(),
+          // footer(),
         ],
       ),
+      bottomNavigationBar: footer(),
     );
   }
 }

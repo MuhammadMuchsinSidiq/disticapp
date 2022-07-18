@@ -1,12 +1,17 @@
+import 'package:disticapp/models/user_model.dart';
+import 'package:disticapp/provider/auth_provider.dart';
+import 'package:disticapp/provider/cart_provider.dart';
 import 'package:disticapp/widget/checkout_card.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../theme.dart';
 
 class CheckoutPage extends StatelessWidget {
-  const CheckoutPage({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel user = authProvider.user;
     PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: backgroundColor1,
@@ -39,7 +44,13 @@ class CheckoutPage extends StatelessWidget {
                 SizedBox(
                   height: 12,
                 ),
-                CheckoutCard(),
+                Column(
+                  children: cartProvider.carts
+                      .map(
+                        (cart) => CheckoutCard(cart),
+                      )
+                      .toList(),
+                ),
 
                 // Container Data Penumpang
                 Container(
@@ -126,7 +137,7 @@ class CheckoutPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    ': Muhammad Muchsin Sidiq',
+                                    ': ${user.name}',
                                     style: primaryTextStyle.copyWith(
                                       fontSize: 15,
                                       fontWeight: medium,
@@ -137,7 +148,7 @@ class CheckoutPage extends StatelessWidget {
                                     height: 5,
                                   ),
                                   Text(
-                                    ': 083804310305',
+                                    ': ${user.phone_number}',
                                     style: primaryTextStyle.copyWith(
                                       fontSize: 15,
                                       fontWeight: medium,
@@ -207,7 +218,7 @@ class CheckoutPage extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '2 Items',
+                            '${cartProvider.totalItems()} Items',
                             style: primaryTextStyle.copyWith(
                               fontSize: 16,
                             ),
@@ -250,7 +261,7 @@ class CheckoutPage extends StatelessWidget {
                                 fontSize: 16, fontWeight: semiBold),
                           ),
                           Text(
-                            'Rp. 40.000',
+                            'Rp. ${cartProvider.totalHarga()}',
                             style: priceTextStyle.copyWith(
                               fontSize: 16,
                               fontWeight: semiBold,
